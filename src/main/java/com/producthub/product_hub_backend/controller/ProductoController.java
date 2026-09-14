@@ -1,7 +1,9 @@
 package com.producthub.product_hub_backend.controller;
 
+import com.producthub.product_hub_backend.dto.CrearProductoRequest;
 import com.producthub.product_hub_backend.model.Producto;
 import com.producthub.product_hub_backend.service.ProductoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +41,18 @@ public class ProductoController {
 
         Producto producto = respuesta.get();
         return ResponseEntity.ok(producto);
+    }
+
+    @PostMapping
+    public ResponseEntity<Producto> crearProducto(
+            @RequestBody CrearProductoRequest request
+            ) {
+        String productoNuevoNombre = request.getNombre();
+        double productoNuevoPrecio = request.getPrecio();
+
+        Producto producto = productoService.crearProducto(productoNuevoNombre, productoNuevoPrecio);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(producto);
     }
 }
