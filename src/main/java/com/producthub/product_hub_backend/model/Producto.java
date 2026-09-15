@@ -27,7 +27,7 @@ public class Producto {
 
     // SETTERS
     public void setNombre(String nombre){
-        this.id = id;
+        this.nombre = nombre;
     }
 
     public void setPrecio(double precio){
