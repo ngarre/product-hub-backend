@@ -41,4 +41,34 @@ public class ProductoService {
         productos.add(productoCreado);
         return productoCreado;
     }
+
+    public boolean eliminarProducto(int id) {
+        Optional<Producto> producto = this.obtenerProductoPorId(id);
+
+        if (producto.isEmpty()){
+            return false;
+        }
+
+        // We can take the Product out of the Optional with get()
+        // because we already checked that the Optional is not empty
+        productos.remove(producto.get());
+        return true;
+    }
+
+    public Optional<Producto> actualizarProductoPorId(int id, String nuevoNombre, double nuevoPrecio){
+        Optional<Producto> productoBuscado = this.obtenerProductoPorId(id);
+
+        if (productoBuscado.isEmpty()){
+           return Optional.empty();
+        }
+
+        Producto producto = productoBuscado.get();
+        producto.setNombre(nuevoNombre);
+        producto.setPrecio(nuevoPrecio);
+
+        // It is not necessary to search again in the ArrayList
+        // because productoBuscado contains a reference to the same Producto object stored in productos
+        return productoBuscado;
+    }
+
 }

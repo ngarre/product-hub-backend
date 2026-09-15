@@ -23,4 +23,14 @@ public class Producto {
     public double getPrecio(){
         return this.precio;
     }
+
+
+    // SETTERS
+    public void setNombre(String nombre){
+        this.id = id;
+    }
+
+    public void setPrecio(double precio){
+        this.precio = precio;
+    }
 }

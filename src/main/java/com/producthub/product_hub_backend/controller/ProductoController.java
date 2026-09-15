@@ -1,5 +1,6 @@
 package com.producthub.product_hub_backend.controller;
 
+import com.producthub.product_hub_backend.dto.ActualizarProductoRequest;
 import com.producthub.product_hub_backend.dto.CrearProductoRequest;
 import com.producthub.product_hub_backend.model.Producto;
 import com.producthub.product_hub_backend.service.ProductoService;
@@ -54,5 +55,34 @@ public class ProductoController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(producto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable int id){
+        boolean respuesta = this.productoService.eliminarProducto(id);
+        if (!respuesta) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Producto> actualizarProducto(
+            @PathVariable int id,
+            @RequestBody ActualizarProductoRequest request
+            ) {
+        String nuevoNombre = request.getNombre();
+        double nuevoPrecio = request.getPrecio();
+
+        Optional<Producto> respuesta = productoService.actualizarProductoPorId(id, nuevoNombre, nuevoPrecio);
+
+        if (respuesta.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Producto productoActualizado = respuesta.get();
+        return ResponseEntity.ok(productoActualizado);
+
     }
 }
