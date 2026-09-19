@@ -1,45 +1,34 @@
 package com.producthub.product_hub_backend.service;
 
 import com.producthub.product_hub_backend.model.Producto;
+import com.producthub.product_hub_backend.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductoService {
 
-    private int siguienteId = 4;
+    private final ProductoRepository productoRepository;
 
-    private final List<Producto> productos = new ArrayList<>(
-            List.of(
-                    new Producto(1, "lapicero", 12.5),
-                    new Producto(2, "cuaderno", 8),
-                    new Producto(3, "rotulador", 5)
-            )
-    );
+    public ProductoService(ProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
+
 
 
     public List<Producto> obtenerProductos(){
-        return productos;
+        return productoRepository.findAll();
     }
 
     public Optional<Producto> obtenerProductoPorId(int id){
-        for (Producto producto: productos) {
-            if (producto.getId() == id ){
-                return Optional.of(producto);
-            }
-        }
-
-        return Optional.empty();
+       return productoRepository.findById(id);
     }
 
     public Producto crearProducto(String nombre, double precio) {
-        Producto productoCreado = new Producto(siguienteId, nombre, precio);
-        siguienteId++;
-        productos.add(productoCreado);
-        return productoCreado;
+        Producto productoCreado = new Producto(nombre, precio);
+        return productoRepository.save(productoCreado);
     }
 
     public boolean eliminarProducto(int id) {
@@ -51,7 +40,7 @@ public class ProductoService {
 
         // We can take the Product out of the Optional with get()
         // because we already checked that the Optional is not empty
-        productos.remove(producto.get());
+        productoRepository.delete(producto.get());
         return true;
     }
 
@@ -66,9 +55,6 @@ public class ProductoService {
         producto.setNombre(nuevoNombre);
         producto.setPrecio(nuevoPrecio);
 
-        // It is not necessary to search again in the ArrayList
-        // because productoBuscado contains a reference to the same Producto object stored in productos
-        return productoBuscado;
+        return Optional.of(productoRepository.save(producto));
     }
-
 }

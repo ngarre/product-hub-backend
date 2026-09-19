@@ -1,12 +1,24 @@
 package com.producthub.product_hub_backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Producto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nombre;
     private double precio;
 
-    public Producto(int id, String nombre, double precio){
-        this.id = id;
+    // This no-argument constructor allows JPA to create Producto objects
+    // when loading products from the database
+    protected Producto() {
+    }
+
+    public Producto(String nombre, double precio){
         this.nombre = nombre;
         this.precio = precio;
     }
